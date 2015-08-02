@@ -1,0 +1,39 @@
+<html>
+<head>
+
+<script type="text/javascript" src="angular.min.js"></script>
+<script type="text/javascript">
+
+var app = angular.module("app",[]);
+app.run(function($templateCache){
+  $templateCache.put("template.html","<p>Hi {{name}}</p>");
+  $templateCache.put("template2.html","<p>Bye {{name}}</p>");
+  });
+
+app.directive("widget",function($templateCache,$compile){
+  return{
+    restrict:"E",
+    // templateUrl:'template.html',
+    compile:function($e,$a){      
+      return{
+        pre:function(s,e,a){
+          var template = angular.element($templateCache.get(a.id+'.html'));
+          $e.append( $compile(template)(s));
+      },
+        post:function(s,e,a){}
+      }  
+    }
+  }
+});
+
+app.controller('ctrl', ['$scope','$interpolate','$q',function(a,b,c){
+  a.name = "SivaSankar";
+}]);
+
+</script>
+</head>
+<body ng-app="app" ng-controller="ctrl"> 
+<widget id="template"></widget>
+<widget id="template2"></widget>
+</body>
+</html>

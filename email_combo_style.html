@@ -9,25 +9,24 @@ a{text-decoration: none}
 .ico{font-size: 15px;color: rgb(185, 185, 185); cursor: pointer;}
 </style>
  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
+ <script type="text/javascript" src="..\Jslib/angular.min.1.4.js"></script>
+
  <script type="text/javascript">
 var app = angular.module("app",[]);
-app.controller('ctrl', ['$scope', function($scope){
-  $scope.items =[];  
-  $scope.dels = function(index){
-    $scope.items.splice(index,1);
-
-  }
-}])
 app.directive('enteremail',function(){
   return{
     restrict:"A",
     require:"?ngModel",
+    controller:function($scope){
+      $scope.items =[{name:'siva@y.com'},{name:'sisva@y.com'}];  
+      $scope.dels = function(index){
+        $scope.items.splice(index,1);
+      }
+    },
     link:function(s,e,a,_c,trans){
-      console.log(_c)
       _c.$parsers.push(function(val){
-         var reg = /^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/g
+         var reg = /^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{3,3}$/g
          if(reg.test(val)){
-          s.$emit('ok',val);
           s.items.push({name:val});
           _c.$setViewValue("");
           _c.$render();
@@ -41,10 +40,11 @@ app.directive('enteremail',function(){
 
 </head>
 <body ng-app="app"> 
-<div class="box" ng-controller="ctrl">
+<span>To</span>
+<div class="box">
   <div class="brd"> 
     <span class="icon-mail" ng-repeat="item in items">{{item.name}} <a class="ico" ng-click = "dels($index)">X</a></span>
-    <input type="text" class="etext" ng-model="t1" enteremail>
+     <input type="text" class="etext" ng-model="t1" enteremail>
   </div>
 </div>
 
